@@ -1,8 +1,8 @@
 include $(TOPDIR)/rules.mk
 
-PKG_NAME:=luci-app-ssr-plus-mini
-PKG_VERSION:=166
-PKG_RELEASE:=1
+PKG_NAME:=luci-app-ssr-plus
+PKG_VERSION:=170
+PKG_RELEASE:=3
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)
 
@@ -10,32 +10,28 @@ include $(INCLUDE_DIR)/package.mk
 
 define Package/$(PKG_NAME)/config
 config PACKAGE_$(PKG_NAME)_INCLUDE_Shadowsocks
-	bool "Include Shadowsocks"
-	default y if x86||x86_64||arm||aarch64
-
-config PACKAGE_$(PKG_NAME)_INCLUDE_V2ray
-	bool "Include V2ray"
-	default y if x86||x86_64||arm||aarch64
-
-config PACKAGE_$(PKG_NAME)_INCLUDE_Trojan
-	bool "Include Trojan"
-	default y if x86||x86_64||arm||aarch64
-
-config PACKAGE_$(PKG_NAME)_INCLUDE_DNS2SOCKS
-	bool "Include DNS2SOCKS"
+	bool "Include Shadowsocks New Version"
 	default y if x86||x86_64||arm||aarch64
 
 # config PACKAGE_$(PKG_NAME)_INCLUDE_Simple_obfs
 # 	bool "Include Shadowsocks Simple-obfs Plugin"
-# 	default n if x86||x86_64||arm||aarch64
+# 	default y if x86||x86_64||arm||aarch64
 
 # config PACKAGE_$(PKG_NAME)_INCLUDE_V2ray_plugin
 # 	bool "Include Shadowsocks V2ray Plugin"
-# 	default n if x86||x86_64||arm||aarch64
+# 	default y if x86||x86_64||arm||aarch64
+
+# config PACKAGE_$(PKG_NAME)_INCLUDE_V2ray
+# 	bool "Include V2ray"
+# 	default y if x86||x86_64||arm||aarch64
+
+config PACKAGE_$(PKG_NAME)_INCLUDE_Trojan
+	bool "Include Trojan"
+	default y if x86||x86_64||arm||aarch64
 	
 # config PACKAGE_$(PKG_NAME)_INCLUDE_Redsocks2
 # 	bool "Include Redsocks2"
-# 	default n if x86||x86_64||arm||aarch64
+# 	default y if x86||x86_64||arm||aarch64
 
 # config PACKAGE_$(PKG_NAME)_INCLUDE_Kcptun
 # 	bool "Include Kcptun"
@@ -43,21 +39,19 @@ config PACKAGE_$(PKG_NAME)_INCLUDE_DNS2SOCKS
 
 # config PACKAGE_$(PKG_NAME)_INCLUDE_ShadowsocksR_Server
 # 	bool "Include ShadowsocksR Server"
-# 	default n if x86||x86_64||arm||aarch64
-
+# 	default y if x86||x86_64||arm||aarch64
 endef
-
+	
 define Package/$(PKG_NAME)
 	SECTION:=luci
 	CATEGORY:=LuCI
 	SUBMENU:=3. Applications
-	TITLE:=LuCI support for SSR Plus Mini
+	TITLE:=SS/SSR/V2Ray/Trojan LuCI interface
 	PKGARCH:=all
-	DEPENDS:=+ipset +ip-full +iptables-mod-tproxy +dnsmasq-full +coreutils +coreutils-base64 +pdnsd-alt +wget +lua +microsocks +ipt2socks \
+	DEPENDS:=+ipset +ip-full +iptables-mod-tproxy +dnsmasq-full +coreutils +coreutils-base64 +pdnsd-alt +wget +lua +libuci-lua \
+	+microsocks +ipt2socks +dns2socks +shadowsocks-libev-ss-local \
 	+PACKAGE_$(PKG_NAME)_INCLUDE_Shadowsocks:shadowsocks-libev-ss-redir \
-	+PACKAGE_$(PKG_NAME)_INCLUDE_V2ray:v2ray \
-	+PACKAGE_$(PKG_NAME)_INCLUDE_Trojan:trojan \
-	+PACKAGE_$(PKG_NAME)_INCLUDE_DNS2SOCKS:dns2socks
+	+PACKAGE_$(PKG_NAME)_INCLUDE_Trojan:trojan
 endef
 
 define Build/Prepare
@@ -71,6 +65,7 @@ define Package/$(PKG_NAME)/conffiles
 /etc/config/shadowsocksr
 /etc/config/white.list
 /etc/config/black.list
+/etc/config/netflix.list
 /etc/dnsmasq.ssr/ad.conf
 /etc/dnsmasq.ssr/gfw_list.conf
 endef
