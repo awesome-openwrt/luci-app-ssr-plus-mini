@@ -1,6 +1,6 @@
 include $(TOPDIR)/rules.mk
 
-PKG_NAME:=luci-app-ssr-plus-mini
+PKG_NAME:=luci-app-ssr-plus
 PKG_VERSION:=170
 PKG_RELEASE:=3
 
@@ -37,9 +37,9 @@ config PACKAGE_$(PKG_NAME)_INCLUDE_Trojan
 # 	bool "Include Kcptun"
 # 	default n
 
-# config PACKAGE_$(PKG_NAME)_INCLUDE_ShadowsocksR_Server
-# 	bool "Include ShadowsocksR Server"
-# 	default y if x86||x86_64||arm||aarch64
+config PACKAGE_$(PKG_NAME)_INCLUDE_ShadowsocksR_Server
+	bool "Include ShadowsocksR Server"
+	default y if x86||x86_64||arm||aarch64
 endef
 	
 define Package/$(PKG_NAME)
@@ -48,10 +48,21 @@ define Package/$(PKG_NAME)
 	SUBMENU:=3. Applications
 	TITLE:=SS/SSR/V2Ray/Trojan LuCI interface
 	PKGARCH:=all
-	DEPENDS:=+ipset +ip-full +iptables-mod-tproxy +dnsmasq-full +coreutils +coreutils-base64 +pdnsd-alt +wget +lua +libuci-lua \
-	+microsocks +ipt2socks +dns2socks +shadowsocks-libev-ss-local \
+	# DEPENDS:=+shadowsocksr-libev-alt +ipset +ip-full +iptables-mod-tproxy +dnsmasq-full +coreutils +coreutils-base64 +pdnsd-alt +wget +lua +libuci-lua \
+	# +microsocks +ipt2socks +dns2socks +shadowsocks-libev-ss-local +shadowsocksr-libev-ssr-local \
+	# +PACKAGE_$(PKG_NAME)_INCLUDE_Shadowsocks:shadowsocks-libev-ss-redir \
+	# +PACKAGE_$(PKG_NAME)_INCLUDE_Simple_obfs:simple-obfs \
+	# +PACKAGE_$(PKG_NAME)_INCLUDE_V2ray_plugin:v2ray-plugin \
+	# +PACKAGE_$(PKG_NAME)_INCLUDE_V2ray:v2ray \
+	# +PACKAGE_$(PKG_NAME)_INCLUDE_Trojan:trojan \
+	# +PACKAGE_$(PKG_NAME)_INCLUDE_Redsocks2:redsocks2 \
+	# +PACKAGE_$(PKG_NAME)_INCLUDE_Kcptun:kcptun-client \
+	# +PACKAGE_$(PKG_NAME)_INCLUDE_ShadowsocksR_Server:shadowsocksr-libev-server
+	DEPENDS:=+shadowsocksr-libev-alt +ipset +ip-full +iptables-mod-tproxy +dnsmasq-full +coreutils +coreutils-base64 +pdnsd-alt +wget +lua +libuci-lua \
+	+microsocks +ipt2socks +dns2socks +shadowsocks-libev-ss-local +shadowsocksr-libev-ssr-local \
 	+PACKAGE_$(PKG_NAME)_INCLUDE_Shadowsocks:shadowsocks-libev-ss-redir \
-	+PACKAGE_$(PKG_NAME)_INCLUDE_Trojan:trojan
+	+PACKAGE_$(PKG_NAME)_INCLUDE_Trojan:trojan \
+	+PACKAGE_$(PKG_NAME)_INCLUDE_ShadowsocksR_Server:shadowsocksr-libev-server
 endef
 
 define Build/Prepare
